@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
+        android:background="@color/homeBG"
+        android:layout_height="86dp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:background="@color/colorWhite"
+            android:layout_height="84dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+        <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/img_avatar"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="52dp"
+                app:riv_oval="true"
+                android:scaleType="centerCrop"
+                app:riv_mutate_background="true"
+                android:src="@drawable/ic_play_circle_outline_white_48dp"
+                android:layout_height="52dp"/>
+        <TextView
+                android:id="@+id/tv_name"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/img_avatar"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/tv_uid"
+                app:layout_constraintVertical_chainStyle="packed"
+                android:layout_marginStart="18dp"
+                android:textSize="18sp"
+                android:layout_marginBottom="4dp"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="我的姓名"/>
+        <TextView
+                android:id="@+id/tv_uid"
+                app:layout_constraintTop_toBottomOf="@id/tv_name"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/tv_name"
+                android:layout_height="wrap_content"
+                android:text="康食号：10367154687946651335"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/tv_tag"
+                  android:visibility="gone"
+                  android:text="群"
+                  app:layout_constraintTop_toTopOf="@id/tv_name"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  android:layout_marginEnd="24dp"
+                  android:textColor="@color/white"
+                  android:paddingVertical="2dp"
+                  android:paddingHorizontal="6dp"
+                  android:background="@drawable/circle_primary_3"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintTop_toTopOf="parent"
+              android:visibility="gone"
+              android:id="@+id/ck_select"
+              app:layout_constraintBottom_toBottomOf="parent"
+              android:layout_marginEnd="48dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

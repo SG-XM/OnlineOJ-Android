@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--<color name="colorPrimary">#01518e</color>-->
+    <color name="colorPrimary">#0099ff</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#01518e</color>
+    <color name="white">#ffffff</color>
+    <color name="darkGrey">#CE776E6E</color>
+    <color name="homeBG">#f0f0f0</color>
+    <color name="black">#000000</color>
+    <color name="msgtitle">#006cbe</color>
+    <color name="msgauthor">#8db6d4</color>
+    <color name="unfinished">#bcc8e2</color>
+    <color name="loginColor">#00518E</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="transparent">#00000000</color>
+</resources>

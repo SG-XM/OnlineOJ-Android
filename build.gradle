@@ -1,0 +1,86 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext.kotlin_version = '1.3.40'
+
+    ext {
+        compileSdkVersion = 25
+        buildToolsVersion = "25.0.2"
+        supportSdkVersion = "25.4.0"
+        minSdkVersion = 16
+        targetSdkVersion = 23
+        versionCode = 1
+        versionName = "v1.0"
+        proguard = true
+        rootPrj = "$projectDir/.."
+        ndkAbi = "armeabi-v7a"//, "armeabi-v7a", "arm64-v8a"
+        sdkType = "liteavsdk"
+        noffmpeg = false
+        noijkplay = false
+        useASAN = true
+        aekit_version = '1.0.19-cloud'
+    }
+
+    ext {
+        versions = [
+                minSdk    : 21,
+                targetSdk : 28,
+                compileSdk: 28,
+                buildTools: '28.0.3',
+                support   : '28.0.0',
+                kotlin    : '1.3.31',
+        ]
+
+        dependenciesMap = [
+                'support-v4'          : "com.android.support:support-v4:${versions.support}",
+                'appcompat-v7'        : "com.android.support:appcompat-v7:${versions.support}",
+                'recyclerview-v7'     : "com.android.support:recyclerview-v7:${versions.support}",
+                'cardview-v7'         : "com.android.support:cardview-v7:${versions.support}",
+                'design'              : "com.android.support:design:${versions.support}",
+
+                'multidex'            : 'com.android.support:multidex:1.0.2',
+                'constraint-layout'   : 'com.android.support.constraint:constraint-layout:1.1.3',
+
+                'lifecycle-extensions': 'android.arch.lifecycle:extensions:1.1.0',
+                'lifecycle-compiler'  : 'android.arch.lifecycle:compiler:1.1.0',
+
+                'kotlin-stdlib'       : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}",
+                'kotlinx-coroutines'  : 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.1',
+        ]
+
+        supportLibraries = [
+                'support-v4',
+                'appcompat-v7',
+                'recyclerview-v7',
+                'cardview-v7',
+                'design',
+        ]
+
+        archLibraries = [
+                'lifecycle-extensions'
+        ]
+    }
+    repositories {
+        google()
+        jcenter()
+        
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

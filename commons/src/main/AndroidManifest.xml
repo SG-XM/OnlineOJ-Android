@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.twt.zq.commons">
+
+    <application>
+        <activity android:name=".view.MorePhotoActivity">
+        </activity>
+        <activity android:name=".util.PDFViewerActivity">
+        </activity>
+    </application>
+
+</manifest>
