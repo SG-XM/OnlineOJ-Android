@@ -6,14 +6,125 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity">
+    <androidx.cardview.widget.CardView
+            android:id="@+id/card_oj"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_marginStart="24dp"
+            app:cardCornerRadius="48dp"
+            app:cardBackgroundColor="@color/colorOJ"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintBottom_toTopOf="@id/card_option"
+            android:layout_height="250dp">
+        <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
+                                                           android:layout_height="match_parent">
+            <TextView android:layout_width="wrap_content"
+                      android:id="@+id/tv_title1"
+                      android:layout_height="wrap_content"
+                      android:layout_marginStart="32dp"
+                      android:layout_marginTop="32dp"
+                      android:textColor="@color/black"
+                      app:layout_constraintTop_toTopOf="parent"
+                      app:layout_constraintStart_toStartOf="parent"
+                      android:textStyle="bold"
+                      android:text="Online Judge"
+                      android:textSize="30sp"/>
+            <TextView
+                    android:id="@+id/tv_title2"
+                    android:layout_width="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="Join and see your ranking!"
+            />
+            <TextView
+                    android:layout_width="0dp"
+                    android:id="@+id/tv_title3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="Rank 1st/1500"
+            />
+            <lecho.lib.hellocharts.view.ColumnChartView
+                    android:id="@+id/chart_oj"
+                    android:layout_width="0dp" android:layout_height="0dp"
+                    android:layout_marginTop="12dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="32dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginEnd="32dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello World!"
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+            android:id="@+id/card_option"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            app:cardCornerRadius="48dp"
+            app:cardBackgroundColor="@color/colorOP"
+            app:layout_constraintTop_toBottomOf="@id/card_oj"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            android:layout_width="match_parent"
+            android:layout_height="250dp">
+        <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
+                                                           android:layout_height="match_parent">
+            <TextView android:layout_width="wrap_content"
+                      android:id="@+id/tv_title4"
+                      android:layout_height="wrap_content"
+                      android:layout_marginStart="32dp"
+                      android:layout_marginTop="32dp"
+                      android:textColor="@color/black"
+                      app:layout_constraintTop_toTopOf="parent"
+                      app:layout_constraintStart_toStartOf="parent"
+                      android:textStyle="bold"
+                      android:text="Online Judge"
+                      android:textSize="30sp"/>
+            <TextView
+                    android:id="@+id/tv_title5"
+                    android:layout_width="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title4"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="Join and see your ranking!"
+            />
+            <TextView
+                    android:layout_width="0dp"
+                    android:id="@+id/tv_title6"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="Rank 1st/1500"
+            />
+            <lecho.lib.hellocharts.view.LineChartView
+                    android:id="@+id/chart_op"
+                    android:layout_width="0dp" android:layout_height="0dp"
+                    android:layout_marginTop="12dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title6"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginEnd="32dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

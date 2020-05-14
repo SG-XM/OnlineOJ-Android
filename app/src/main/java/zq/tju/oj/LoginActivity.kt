@@ -9,6 +9,7 @@ import com.twt.zq.commons.extentions.bindNonNull
 import kotlinx.android.synthetic.main.activity_login.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.json.JSONObject
 import zq.tju.oj.service.ServiceModel
@@ -35,6 +36,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         CommonContext.registerContext(this)
+        CommonContext.application.startActivity<MainActivity>()
         bt_login.setOnClickListener {
 
             if (code_input.text.isEmpty()) {
