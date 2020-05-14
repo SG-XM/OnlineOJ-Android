@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit
  */
 
 
-
 internal inline val Request.authorized
     get() = if (header("Authorization") == null)
         newBuilder().addHeader("Authorization", "bearer ${CommonPreferences.token}").build()
@@ -27,81 +26,55 @@ internal inline val Request.closed
         newBuilder().addHeader("Connection", "close").build()
     else this
 
-object CookieInterceptor : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val cookieHeader = StringBuilder()
-        CommonPreferences.cookies.forEach {
-            cookieHeader.append(it.name()).append('=').append(it.value()).append(";")
-        }
-        if (cookieHeader.isNotEmpty()) cookieHeader.delete(cookieHeader.length - 1, cookieHeader.length - 1)
-        return chain.proceed(chain.request().newBuilder().addHeader("Cookie", cookieHeader.toString()).build())
-    }
-}
+//object CookieInterceptor : Interceptor {
+//    override fun intercept(chain: Interceptor.Chain): Response {
+//        val cookieHeader = StringBuilder()
+//        CommonPreferences.cookies.forEach {
+//            cookieHeader.append(it.name()).append('=').append(it.value()).append(";")
+//        }
+//        if (cookieHeader.isNotEmpty()) cookieHeader.delete(cookieHeader.length - 1, cookieHeader.length - 1)
+//        return chain.proceed(chain.request().newBuilder().addHeader("Cookie", cookieHeader.toString()).build())
+//    }
+//}
 
 object CloseInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response =
         chain.proceed(chain.request().closed)
 }
 
-object SaveCookieInterceptor : Interceptor {
+object SaveTokenInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val res = chain.proceed(chain.request())
         val headers = res.headers()
-        val cookieStrings = headers.values("Set-Cookie")
-        val cookies = mutableListOf<Cookie>()
+        val cookieStrings = headers.values("Authorization")
         cookieStrings.forEach {
-            it.split(";").forEach {
-                Cookie.parse(chain.request().url(), it)?.let {
-                    cookies.add(it)
-                }
-            }
+            CommonPreferences.token = it
         }
-        CommonPreferences.cookies = CommonPreferences.cookies.apply { addAll(cookies) }
         return res
     }
 }
 
-object ApiSignInterceptor : Interceptor {
+object TokenInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        Log.d("woggle", chain.request().url().url().toString())
-        Log.d("woggle", chain.request().method())
-        if (chain.request().method() != "GET")
-            return chain.proceed(chain.request())
-        val signUrl = KsEnc.signUrl(CommonContext.application, chain.request().url().url().toString())
-        Log.d("woggle", signUrl)
-        return chain.proceed(chain.request().newBuilder().url(signUrl).build())
+        return chain.proceed(chain.request().newBuilder().addHeader("Authorization",CommonPreferences.token).build())
     }
 
 }
 
 object ServiceFactory {
-    private const val BASE_URL = "https://kangshilife.com/"
+    private const val BASE_URL = "http://47.101.33.252:4869/"
     //private const val BASE_URL = "http://47.92.141.153/"
     private val loggingInterceptor = HttpLoggingInterceptor()
         .apply { level = HttpLoggingInterceptor.Level.BODY }
     private val client = OkHttpClient.Builder()
         .retryOnConnectionFailure(true)
-        //.authenticator(RealAuthenticator)
         .addNetworkInterceptor(CloseInterceptor)
-        .addInterceptor(ApiSignInterceptor)
-        //.addNetworkInterceptor(ErrorPushInterceptor)
-        .addInterceptor(CookieInterceptor)
         .addNetworkInterceptor(loggingInterceptor)
-        .addNetworkInterceptor(SaveCookieInterceptor)
+        .addNetworkInterceptor(SaveTokenInterceptor)
+        .addInterceptor(TokenInterceptor)
         .connectTimeout(20, TimeUnit.SECONDS)
         .readTimeout(20, TimeUnit.SECONDS)
         .writeTimeout(20, TimeUnit.SECONDS)
-        .cookieJar(object : CookieJar {
-            override fun saveFromResponse(url: HttpUrl, cookies: MutableList<Cookie>) {
-                CommonPreferences.cookies = cookies
-                for (cookie in cookies) {
-//                    println("cookie Name:" + cookie.name())
-//                    println("cookie Path:" + cookie.path())
-                }
-            }
-
-            override fun loadForRequest(url: HttpUrl): MutableList<Cookie> = CommonPreferences.cookies.toMutableList()
-        })
         .build()!!
 
     val retrofit = Retrofit.Builder()
@@ -135,7 +108,7 @@ fun <T> CommonBody<T>.deal(callback: (T) -> Unit) {
 }
 
 fun <T> CommonBody<T>.dealOrNull(callback: (T?) -> Unit) {
-    if (status == 200) {
+    if (status == 10000) {
         callback(data)
     } else {
         if (msg != null)

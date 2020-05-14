@@ -13,13 +13,14 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.jetbrains.anko.startActivity
 import retrofit2.http.*
+import zq.tju.oj.MainActivity
 
 /**
  * Created by SGXM on 2020/3/24.
  */
 interface ServiceAPI {
 
-    @POST("/user/login")
+    @POST("/auth/login")
     @Headers("Content-type:application/json;charset=UTF-8")
     fun login(@Body body: RequestBody): Deferred<CommonBody<Any>>
 
@@ -44,8 +45,7 @@ object ServiceModel {
         GlobalScope.launch(Dispatchers.Main + coroutineHandler) {
             ServiceAPI.login(body).await().dealOrNull {
                 toast("登录成功")
-                //token = it!!.access_token!!
-//                CommonContext.application.startActivity<HomeActivity>()
+                CommonContext.application.startActivity<MainActivity>()
             }
         }
     }

@@ -9,7 +9,6 @@ import okhttp3.Cookie
  */
 object CommonPreferences {
 
-    val isLoginIM = MutableLiveData<Boolean>().apply { this.value = false }
     const val TYPE_USER = "1"
     const val TYPE_DOC = "2"
     const val TYPE_ADMIN = "3"
@@ -19,7 +18,6 @@ object CommonPreferences {
     var username by hawk("username", "")
     var avatar by hawk("avatar", "")
     var password by hawk("password", "")
-    var cookies by hawk("cookies", mutableListOf<Cookie>())
     var uid by hawk("uid", "")
     var nickname by hawk("nickname", "")
     var realname by hawk("realname", "")
@@ -37,10 +35,7 @@ object CommonPreferences {
     var height by hawk("height", "")
     var role by hawk("role", "")//TYPE_USER
     var userSign by hawk("userSign", "")
-    var cusCity = MutableLiveData<String>().apply { value = "云南" }// by hawk("cusCity", "云南")
-    var cusCid = MutableLiveData<String>().apply { value = "530000" }// by hawk("cusCid", "530000")//默认云南
     var cusHosptial by hawk("cusHosptial", "")// by hawk("cusCity", "云南")
-    var cusHid = MutableLiveData<String>().apply { value = "530000" }
     var roomId by hawk("roomId", "1234")
     var roomTime by hawk("roomTime", "100000000")
     var trtcUserSign by hawk("trtcUserSign", "")
