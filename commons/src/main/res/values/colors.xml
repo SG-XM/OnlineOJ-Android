@@ -6,7 +6,7 @@
     <color name="colorAccent">#01518e</color>
     <color name="white">#ffffff</color>
     <color name="darkGrey">#CE776E6E</color>
-    <color name="homeBG">#f0f0f0</color>
+    <color name="homeBG">#F7F7Fc</color>
     <color name="black">#000000</color>
     <color name="msgtitle">#006cbe</color>
     <color name="msgauthor">#8db6d4</color>

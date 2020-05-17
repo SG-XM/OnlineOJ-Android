@@ -3,8 +3,10 @@ package zq.tju.oj.service
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.twt.zq.commons.common.*
+import com.twt.zq.commons.extentions.Item
 import com.twt.zq.commons.extentions.MyToast.toast
 import com.twt.zq.commons.extentions.coroutineHandler
+import com.twt.zq.commons.extentions.dealFetch
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -14,6 +16,9 @@ import okhttp3.RequestBody
 import org.jetbrains.anko.startActivity
 import retrofit2.http.*
 import zq.tju.oj.MainActivity
+import zq.tju.oj.view.OJHeaderItem
+import zq.tju.oj.view.OJRecordItem
+import zq.tju.oj.view.OjDetailActivity
 
 /**
  * Created by SGXM on 2020/3/24.
@@ -33,9 +38,11 @@ interface ServiceAPI {
     @GET("/api/back/quiz/rank/me")
     fun quizRank(): Deferred<CommonBody<QuizRankData>>
 
-    @GET(" /api/back/oj/rank/me")
+    @GET("/api/back/oj/rank/me")
     fun ojRank(): Deferred<CommonBody<OjRankData>>
 
+    @GET("/api/back/oj/progress")
+    fun ojProgress(@Query("pageNum") pageNum: Int): Deferred<CommonBody<List<OJProcessBean>>>
 
     @POST("/room/cover")
     @Multipart
@@ -46,9 +53,13 @@ interface ServiceAPI {
 
 object ServiceModel {
     val quizRankLiveData = MutableLiveData<QuizRankData>()
+    val ojProcessLiveData = MutableLiveData<MutableList<Item>>()
     val ojRankLiveData = MutableLiveData<OjRankData>()
-//    var token: String = "1ccc45bc-5404-4a70-9e6d-7dea10b9938b"
+    //    var token: String = "1ccc45bc-5404-4a70-9e6d-7dea10b9938b"
     val rooms = MutableLiveData<MutableList<RoomBean>>()
+    val isOjProcessLoading = MutableLiveData<Boolean>().apply { value = false }
+
+
     fun login(body: RequestBody) {
         GlobalScope.launch(Dispatchers.Main + coroutineHandler) {
             ServiceAPI.login(body).await().dealOrNull {
@@ -65,6 +76,41 @@ object ServiceModel {
             }
         }
     }
+
+    fun ojProcess() {
+        GlobalScope.launch(Dispatchers.Main + coroutineHandler) {
+            ServiceAPI.ojProgress(1).await().deal {
+                val list = mutableListOf<Item>()
+                val ojdata = ojRankLiveData.value
+                list.add(
+                    OJHeaderItem(
+                        mutableListOf(
+                            ojdata!!.ojProblemPassCountDTO.easy.toFloat(),
+                            ojdata.ojProblemPassCountDTO.medium.toFloat(),
+                            ojdata.ojProblemPassCountDTO.hard.toFloat()
+                        )
+                    )
+                )
+                it.forEach { list.add(OJRecordItem(it)) }
+                ojProcessLiveData.value = list
+            }
+        }.invokeOnCompletion {
+            isOjProcessLoading.value = false
+        }
+    }
+
+    fun fetchMoreojProcess(page: Int) {
+        GlobalScope.launch(Dispatchers.Main + coroutineHandler) {
+            ServiceAPI.ojProgress(page).await().deal {
+                val list = mutableListOf<Item>()
+                it.forEach { list.add(OJRecordItem(it)) }
+                ojProcessLiveData.value = ojProcessLiveData.value?.dealFetch(OjDetailActivity, list)
+            }
+        }.invokeOnCompletion {
+            isOjProcessLoading.value = false
+        }
+    }
+
     fun quizRank() {
         GlobalScope.launch(Dispatchers.Main + coroutineHandler) {
             ServiceAPI.quizRank().await().dealOrNull {
@@ -72,6 +118,7 @@ object ServiceModel {
             }
         }
     }
+
 
     fun cover(file: MultipartBody.Part) {
         GlobalScope.launch(Dispatchers.Main + coroutineHandler) {
@@ -97,6 +144,13 @@ object ServiceModel {
         }
     }
 }
+
+data class OJProcessBean(
+    val id:Int=0,
+    val daysFromNow: Int,
+    val pass: Boolean,
+    val title: String
+)
 
 data class OjRankData(
     val ojProblemPassCountDTO: OjProblemPassCountDTO,

@@ -7,7 +7,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import lecho.lib.hellocharts.model.*
 import lecho.lib.hellocharts.util.ChartUtils
 import org.jetbrains.anko.collections.forEachWithIndex
+import org.jetbrains.anko.startActivity
 import zq.tju.oj.service.ServiceModel
+import zq.tju.oj.view.OjDetailActivity
 
 
 class MainActivity : AppCompatActivity() {
@@ -15,6 +17,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        card_oj.setOnClickListener {
+            startActivity<OjDetailActivity>()
+        }
         initData()
     }
 
@@ -44,7 +49,6 @@ class MainActivity : AppCompatActivity() {
             })
         }
         columnData.setColumns(columns)
-//        chart_oj.isZoomEnabled = false
         chart_oj.columnChartData = columnData
     }
 

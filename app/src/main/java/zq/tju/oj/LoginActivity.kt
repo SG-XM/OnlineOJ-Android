@@ -49,6 +49,7 @@ class LoginActivity : AppCompatActivity() {
             val obj = JSONObject()
             obj.put("email", account_input.text)
             obj.put("password", code_input.text)
+            obj.put("rememberMe",true)
             val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), obj.toString())
 
             ServiceModel.login(body)
