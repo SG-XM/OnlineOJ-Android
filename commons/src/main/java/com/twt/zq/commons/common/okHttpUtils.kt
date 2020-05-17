@@ -69,9 +69,9 @@ object ServiceFactory {
     private val client = OkHttpClient.Builder()
         .retryOnConnectionFailure(true)
         .addNetworkInterceptor(CloseInterceptor)
-        .addNetworkInterceptor(loggingInterceptor)
         .addNetworkInterceptor(SaveTokenInterceptor)
         .addInterceptor(TokenInterceptor)
+        .addNetworkInterceptor(loggingInterceptor)
         .connectTimeout(20, TimeUnit.SECONDS)
         .readTimeout(20, TimeUnit.SECONDS)
         .writeTimeout(20, TimeUnit.SECONDS)
@@ -101,7 +101,7 @@ data class AnyBody<out T>(
 )
 
 fun <T> CommonBody<T>.deal(callback: (T) -> Unit) {
-    if (status == 200 && data != null) {
+    if (status == 10000 && data != null) {
         callback(data)
     } else
         toast(msg ?: "无记录 code = ${status}")

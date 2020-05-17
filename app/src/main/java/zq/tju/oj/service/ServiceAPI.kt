@@ -30,6 +30,12 @@ interface ServiceAPI {
     @GET("/room")
     fun room(): Deferred<CommonBody<MutableList<RoomBean>>>
 
+    @GET("/api/back/quiz/rank/me")
+    fun quizRank(): Deferred<CommonBody<QuizRankData>>
+
+    @GET(" /api/back/oj/rank/me")
+    fun ojRank(): Deferred<CommonBody<OjRankData>>
+
 
     @POST("/room/cover")
     @Multipart
@@ -39,13 +45,30 @@ interface ServiceAPI {
 }
 
 object ServiceModel {
-    var token: String = "1ccc45bc-5404-4a70-9e6d-7dea10b9938b"
+    val quizRankLiveData = MutableLiveData<QuizRankData>()
+    val ojRankLiveData = MutableLiveData<OjRankData>()
+//    var token: String = "1ccc45bc-5404-4a70-9e6d-7dea10b9938b"
     val rooms = MutableLiveData<MutableList<RoomBean>>()
     fun login(body: RequestBody) {
         GlobalScope.launch(Dispatchers.Main + coroutineHandler) {
             ServiceAPI.login(body).await().dealOrNull {
                 toast("登录成功")
                 CommonContext.application.startActivity<MainActivity>()
+            }
+        }
+    }
+
+    fun ojRank() {
+        GlobalScope.launch(Dispatchers.Main + coroutineHandler) {
+            ServiceAPI.ojRank().await().dealOrNull {
+                ojRankLiveData.value = it
+            }
+        }
+    }
+    fun quizRank() {
+        GlobalScope.launch(Dispatchers.Main + coroutineHandler) {
+            ServiceAPI.quizRank().await().dealOrNull {
+                quizRankLiveData.value = it
             }
         }
     }
@@ -75,30 +98,47 @@ object ServiceModel {
     }
 }
 
+data class OjRankData(
+    val ojProblemPassCountDTO: OjProblemPassCountDTO,
+    val rank: Int,
+    val totalUser: Int
+)
+
+data class OjProblemPassCountDTO(
+    val easy: Int,
+    val hard: Int,
+    val medium: Int
+)
+
+data class QuizRankData(
+    val rank: Int,
+    val scoreList: List<Int>,
+    val totalUser: Int
+)
 
 data class RoomBean(
-        val active: Boolean,
-        val cover: String,
-        val createTime: String,
-        val id: Int,
-        val onlineUserCount: Int,
-        val updateTime: String,
-        val user: User
+    val active: Boolean,
+    val cover: String,
+    val createTime: String,
+    val id: Int,
+    val onlineUserCount: Int,
+    val updateTime: String,
+    val user: User
 )
 
 data class User(
-        val authorities: Any,
-        val createTime: String,
-        val id: Int,
-        val mobile: String,
-        val updateTime: String,
-        val username: String
+    val authorities: Any,
+    val createTime: String,
+    val id: Int,
+    val mobile: String,
+    val updateTime: String,
+    val username: String
 )
 
 data class LoginBean(
-        val access_token: String,
-        val expires_in: Int,
-        val refresh_token: String,
-        val scope: String,
-        val token_type: String
+    val access_token: String,
+    val expires_in: Int,
+    val refresh_token: String,
+    val scope: String,
+    val token_type: String
 )

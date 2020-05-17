@@ -5,6 +5,7 @@ import android.os.CountDownTimer
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import com.twt.zq.commons.common.CommonContext
+import com.twt.zq.commons.common.CommonPreferences
 import com.twt.zq.commons.extentions.bindNonNull
 import kotlinx.android.synthetic.main.activity_login.*
 import okhttp3.MediaType
@@ -32,11 +33,13 @@ class LoginActivity : AppCompatActivity() {
             vercodetimeLiveData.value = millisUntilFinished.toInt() / 1000
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         CommonContext.registerContext(this)
-        CommonContext.application.startActivity<MainActivity>()
+        if (CommonPreferences.token != "")
+            CommonContext.application.startActivity<MainActivity>()
         bt_login.setOnClickListener {
 
             if (code_input.text.isEmpty()) {
@@ -44,8 +47,8 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             val obj = JSONObject()
-            obj.put("email",account_input.text)
-            obj.put("password",code_input.text)
+            obj.put("email", account_input.text)
+            obj.put("password", code_input.text)
             val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), obj.toString())
 
             ServiceModel.login(body)
