@@ -1,5 +1,6 @@
 package zq.tju.oj
 
+import android.content.Context
 import android.os.Bundle
 import android.os.CountDownTimer
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import okhttp3.RequestBody
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.json.JSONObject
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import zq.tju.oj.service.ServiceModel
 
 
@@ -38,8 +40,10 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         CommonContext.registerContext(this)
-        if (CommonPreferences.token != "")
+        if (CommonPreferences.token != "") {
             CommonContext.application.startActivity<MainActivity>()
+            finish()
+        }
         bt_login.setOnClickListener {
 
             if (code_input.text.isEmpty()) {
@@ -49,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
             val obj = JSONObject()
             obj.put("email", account_input.text)
             obj.put("password", code_input.text)
-            obj.put("rememberMe",true)
+            obj.put("rememberMe", true)
             val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), obj.toString())
 
             ServiceModel.login(body)
@@ -71,5 +75,9 @@ class LoginActivity : AppCompatActivity() {
         vercodetimeLiveData.bindNonNull(this) {
             btn_send.text = "请等待($it)"
         }
+    }
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 }

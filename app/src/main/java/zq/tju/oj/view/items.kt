@@ -8,6 +8,7 @@ import com.twt.zq.commons.extentions.Item
 import com.twt.zq.commons.extentions.ItemController
 import kotlinx.android.synthetic.main.oj_item_header.view.*
 import kotlinx.android.synthetic.main.oj_item_record.view.*
+import kotlinx.android.synthetic.main.quiz_item_error.view.*
 import lecho.lib.hellocharts.model.PieChartData
 import lecho.lib.hellocharts.model.SliceValue
 import lecho.lib.hellocharts.util.ChartUtils
@@ -15,8 +16,54 @@ import lecho.lib.hellocharts.view.PieChartView
 import org.jetbrains.anko.backgroundDrawable
 import org.jetbrains.anko.collections.forEachWithIndex
 import org.jetbrains.anko.layoutInflater
+import org.jetbrains.anko.textColor
 import zq.tju.oj.R
+import zq.tju.oj.service.ErrorRankBean
 import zq.tju.oj.service.OJProcessBean
+
+class QuizErrorItem(val bean: ErrorRankBean) : Item {
+    override fun areItemsTheSame(newItem: Item): Boolean {
+        return (newItem as? QuizErrorItem)?.bean?.pid == this.bean.pid
+    }
+
+    override fun areContentsTheSame(newItem: Item): Boolean {
+        return (newItem as? QuizErrorItem)?.bean?.pid == this.bean.pid
+    }
+
+    companion object : ItemController {
+        override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+            val view = parent.context.layoutInflater.inflate(R.layout.quiz_item_error, parent, false)
+            return ViewHolder(view, view.tv_qz_title, view.tv_qz_rate, view.tv_qz_cnt, view.tv_qz_type)
+        }
+
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: Item) {
+            holder as ViewHolder
+            item as QuizErrorItem
+            holder.apply {
+                title.text = item.bean.description
+                rate.text = if (item.bean.totalCount == 0) " - " else "Accuracy ${(1.0 - item.bean.errorRate) * 100}%"
+                rate.textColor =
+                    if (item.bean.totalCount > 0 && item.bean.errorRate < 0.5) view.resources.getColor(R.color.seagreen) else view.resources.getColor(
+                        R.color.design_default_color_error
+                    )
+                cnt.text = "${item.bean.totalCount} submits"
+                type.text = when (item.bean.typeId) {
+                    2 -> "单选题"
+                    3 -> "判断题"
+                    else -> "多选题"
+                }
+                type.backgroundDrawable =
+                    view.resources.getDrawable(if (item.bean.typeId == 2) R.drawable.textview_circle_ac else R.drawable.circle_primary_3)
+
+            }
+        }
+    }
+
+    class ViewHolder(val view: View, val title: TextView, val rate: TextView, val cnt: TextView, val type: TextView) :
+        RecyclerView.ViewHolder(view)
+
+    override val controller = Companion
+}
 
 class OJHeaderItem(val list: List<Float>) : Item {
     companion object : ItemController {
@@ -58,7 +105,9 @@ class OJHeaderItem(val list: List<Float>) : Item {
 }
 
 class OJRecordItem(val bean: OJProcessBean) : Item {
-    override fun areItemsTheSame(newItem: Item): Boolean = (newItem as? OJRecordItem)?.bean?.id == this.bean.id//newItem is OJRecordItem
+    override fun areItemsTheSame(newItem: Item): Boolean =
+        (newItem as? OJRecordItem)?.bean?.id == this.bean.id//newItem is OJRecordItem
+
     override fun areContentsTheSame(newItem: Item): Boolean = (newItem as? OJRecordItem)?.bean?.id == this.bean.id
 
     companion object : ItemController {

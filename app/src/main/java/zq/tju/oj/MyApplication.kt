@@ -6,6 +6,7 @@ package zq.tju.oj
 import android.app.Application
 import com.orhanobut.hawk.Hawk
 import com.twt.zq.commons.common.CommonContext
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig
 
 
 /**
@@ -16,7 +17,12 @@ import com.twt.zq.commons.common.CommonContext
 class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-
+        CalligraphyConfig.initDefault(
+            CalligraphyConfig.Builder()
+                .setDefaultFontPath("font/din.otf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        )
 
         Hawk.init(this).build()
         CommonContext.apply {

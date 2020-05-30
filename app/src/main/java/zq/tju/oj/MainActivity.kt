@@ -10,6 +10,7 @@ import org.jetbrains.anko.collections.forEachWithIndex
 import org.jetbrains.anko.startActivity
 import zq.tju.oj.service.ServiceModel
 import zq.tju.oj.view.OjDetailActivity
+import zq.tju.oj.view.QuizDetailActivity
 
 
 class MainActivity : AppCompatActivity() {
@@ -19,6 +20,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         card_oj.setOnClickListener {
             startActivity<OjDetailActivity>()
+        }
+        card_option.setOnClickListener {
+            startActivity<QuizDetailActivity>()
         }
         initData()
     }
@@ -55,7 +59,7 @@ class MainActivity : AppCompatActivity() {
     private fun initData() {
 
         ServiceModel.apply {
-            ojRank()
+            ojRank(this@MainActivity)
             quizRank()
             ojRankLiveData.bindNonNull(this@MainActivity) {
                 tv_title3.text = "Rank: #${it.rank}/${it.totalUser}"

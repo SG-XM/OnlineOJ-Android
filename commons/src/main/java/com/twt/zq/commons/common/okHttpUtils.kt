@@ -62,8 +62,8 @@ object TokenInterceptor : Interceptor {
 }
 
 object ServiceFactory {
-    private const val BASE_URL = "http://tsai73.natappfree.cc/"
-    //private const val BASE_URL = "http://47.92.141.153/"
+//    private const val BASE_URL = "http://tsai73.natappfree.cc/"
+    private const val BASE_URL = "http://47.101.33.252/"
     private val loggingInterceptor = HttpLoggingInterceptor()
         .apply { level = HttpLoggingInterceptor.Level.BODY }
     private val client = OkHttpClient.Builder()

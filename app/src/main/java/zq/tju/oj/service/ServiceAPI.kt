@@ -1,5 +1,6 @@
 package zq.tju.oj.service
 
+import android.app.Activity
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.twt.zq.commons.common.*
@@ -15,10 +16,12 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.jetbrains.anko.startActivity
 import retrofit2.http.*
+import zq.tju.oj.LoginActivity
 import zq.tju.oj.MainActivity
 import zq.tju.oj.view.OJHeaderItem
 import zq.tju.oj.view.OJRecordItem
 import zq.tju.oj.view.OjDetailActivity
+import zq.tju.oj.view.QuizErrorItem
 
 /**
  * Created by SGXM on 2020/3/24.
@@ -48,17 +51,22 @@ interface ServiceAPI {
     @Multipart
     fun cover(@Part file: MultipartBody.Part): Deferred<CommonBody<MutableList<RoomBean>>>
 
+    @GET("/api/back/quiz/rank/error")
+    fun errorRank(@Query("pageNum") pageNum: Int): Deferred<CommonBody<List<ErrorRankBean>>>
+
+
     companion object : ServiceAPI by ServiceFactory()
 }
 
 object ServiceModel {
     val quizRankLiveData = MutableLiveData<QuizRankData>()
     val ojProcessLiveData = MutableLiveData<MutableList<Item>>()
+    val quizErrorLiveData = MutableLiveData<MutableList<Item>>()
     val ojRankLiveData = MutableLiveData<OjRankData>()
     //    var token: String = "1ccc45bc-5404-4a70-9e6d-7dea10b9938b"
     val rooms = MutableLiveData<MutableList<RoomBean>>()
     val isOjProcessLoading = MutableLiveData<Boolean>().apply { value = false }
-
+    val isQuizErrorLoading = MutableLiveData<Boolean>().apply { value = false }
 
     fun login(body: RequestBody) {
         GlobalScope.launch(Dispatchers.Main + coroutineHandler) {
@@ -69,9 +77,16 @@ object ServiceModel {
         }
     }
 
-    fun ojRank() {
+    fun ojRank(ac: Activity) {
         GlobalScope.launch(Dispatchers.Main + coroutineHandler) {
-            ServiceAPI.ojRank().await().dealOrNull {
+            val data = ServiceAPI.ojRank().await()
+            if (data.status == 10004) {
+                toast("信息过期，请重新登录")
+                ac.startActivity<LoginActivity>()
+                ac.finish()
+                return@launch
+            }
+            data.dealOrNull {
                 ojRankLiveData.value = it
             }
         }
@@ -96,6 +111,29 @@ object ServiceModel {
             }
         }.invokeOnCompletion {
             isOjProcessLoading.value = false
+        }
+    }
+
+    fun quizError() {
+        GlobalScope.launch(Dispatchers.Main + coroutineHandler) {
+            ServiceAPI.errorRank(1).await().deal {
+                quizErrorLiveData.value = it.map { QuizErrorItem(it) }.toMutableList()
+            }
+        }.invokeOnCompletion {
+            isQuizErrorLoading.value = false
+        }
+    }
+
+
+    fun fetchMoreQuizError(page: Int) {
+        GlobalScope.launch(Dispatchers.Main + coroutineHandler) {
+            ServiceAPI.errorRank(page).await().deal {
+
+                quizErrorLiveData.value =
+                    quizErrorLiveData.value?.dealFetch(OjDetailActivity, it.map { QuizErrorItem(it) })
+            }
+        }.invokeOnCompletion {
+            isQuizErrorLoading.value = false
         }
     }
 
@@ -145,8 +183,16 @@ object ServiceModel {
     }
 }
 
+data class ErrorRankBean(
+    val description: String,
+    val errorRate: Double,
+    val pid: Int,
+    val totalCount: Int,
+    val typeId: Int = 2
+)
+
 data class OJProcessBean(
-    val id:Int=0,
+    val id: Int = 0,
     val daysFromNow: Int,
     val pass: Boolean,
     val title: String
