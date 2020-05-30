@@ -4,18 +4,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.twt.zq.commons.common.CommonContext
 import com.twt.zq.commons.extentions.Item
 import com.twt.zq.commons.extentions.ItemController
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.oj_item_header.view.*
 import kotlinx.android.synthetic.main.oj_item_record.view.*
 import kotlinx.android.synthetic.main.quiz_item_error.view.*
-import lecho.lib.hellocharts.model.PieChartData
-import lecho.lib.hellocharts.model.SliceValue
+import kotlinx.android.synthetic.main.qz_item_header.view.*
+import lecho.lib.hellocharts.model.*
 import lecho.lib.hellocharts.util.ChartUtils
+import lecho.lib.hellocharts.view.LineChartView
 import lecho.lib.hellocharts.view.PieChartView
 import org.jetbrains.anko.backgroundDrawable
 import org.jetbrains.anko.collections.forEachWithIndex
 import org.jetbrains.anko.layoutInflater
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.textColor
 import zq.tju.oj.R
 import zq.tju.oj.service.ErrorRankBean
@@ -55,6 +59,9 @@ class QuizErrorItem(val bean: ErrorRankBean) : Item {
                 type.backgroundDrawable =
                     view.resources.getDrawable(if (item.bean.typeId == 2) R.drawable.textview_circle_ac else R.drawable.circle_primary_3)
 
+                view.setOnClickListener {
+                    view.context.startActivity<ProblemDetailActivity>("pid" to item.bean.pid.toString())
+                }
             }
         }
     }
@@ -64,7 +71,38 @@ class QuizErrorItem(val bean: ErrorRankBean) : Item {
 
     override val controller = Companion
 }
+class QuizHeaderItem(val nums: List<Float>) : Item {
+    companion object : ItemController {
+        override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+            val view = parent.context.layoutInflater.inflate(R.layout.qz_item_header, parent, false)
+            return ViewHolder(view, view.chart_line_qz)
+        }
 
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: Item) {
+            holder as ViewHolder
+            item as QuizHeaderItem
+            holder.apply {
+                val data = LineChartData()
+                val values = mutableListOf<PointValue>()
+                item.nums.forEachWithIndex { i, fl ->
+                    values.add(PointValue(i.toFloat(), fl))
+                }
+                val line: Line =
+                    Line(values).setColor(ChartUtils.pickColor()).setHasLabels(true).setHasLabelsOnlyForSelected(false)
+                val lines: MutableList<Line> = ArrayList()
+                lines.add(line)
+                data.lines = lines
+                chart.isZoomEnabled = false
+                chart.lineChartData = data
+            }
+        }
+    }
+
+    class ViewHolder(val view: View, val chart: LineChartView) :
+        RecyclerView.ViewHolder(view)
+
+    override val controller = Companion
+}
 class OJHeaderItem(val list: List<Float>) : Item {
     companion object : ItemController {
         override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {

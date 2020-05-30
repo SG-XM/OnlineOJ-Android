@@ -18,10 +18,7 @@ import org.jetbrains.anko.startActivity
 import retrofit2.http.*
 import zq.tju.oj.LoginActivity
 import zq.tju.oj.MainActivity
-import zq.tju.oj.view.OJHeaderItem
-import zq.tju.oj.view.OJRecordItem
-import zq.tju.oj.view.OjDetailActivity
-import zq.tju.oj.view.QuizErrorItem
+import zq.tju.oj.view.*
 
 /**
  * Created by SGXM on 2020/3/24.
@@ -54,6 +51,9 @@ interface ServiceAPI {
     @GET("/api/back/quiz/rank/error")
     fun errorRank(@Query("pageNum") pageNum: Int): Deferred<CommonBody<List<ErrorRankBean>>>
 
+    @GET("/api/back/quiz/rank/error/{pid}")
+    fun quizDetail(@Path("pid") pid: String): Deferred<CommonBody<QuizDetailBean>>
+
 
     companion object : ServiceAPI by ServiceFactory()
 }
@@ -65,6 +65,7 @@ object ServiceModel {
     val ojRankLiveData = MutableLiveData<OjRankData>()
     //    var token: String = "1ccc45bc-5404-4a70-9e6d-7dea10b9938b"
     val rooms = MutableLiveData<MutableList<RoomBean>>()
+    val quizDetailLiveData = MutableLiveData<QuizDetailBean>()
     val isOjProcessLoading = MutableLiveData<Boolean>().apply { value = false }
     val isQuizErrorLoading = MutableLiveData<Boolean>().apply { value = false }
 
@@ -73,6 +74,15 @@ object ServiceModel {
             ServiceAPI.login(body).await().dealOrNull {
                 toast("登录成功")
                 CommonContext.application.startActivity<MainActivity>()
+            }
+        }
+    }
+
+    fun quizDetail(pid: String) {
+        GlobalScope.launch(Dispatchers.Main + coroutineHandler) {
+
+            ServiceAPI.quizDetail(pid).await().dealOrNull {
+                quizDetailLiveData.value = it
             }
         }
     }
@@ -116,8 +126,12 @@ object ServiceModel {
 
     fun quizError() {
         GlobalScope.launch(Dispatchers.Main + coroutineHandler) {
+
             ServiceAPI.errorRank(1).await().deal {
-                quizErrorLiveData.value = it.map { QuizErrorItem(it) }.toMutableList()
+                val list = mutableListOf<Item>()
+                list.add(QuizHeaderItem(quizRankLiveData.value?.scoreList?.map { it.toFloat() } ?: emptyList()))
+                list.addAll(it.map { QuizErrorItem(it) })
+                quizErrorLiveData.value = list
             }
         }.invokeOnCompletion {
             isQuizErrorLoading.value = false
@@ -182,6 +196,17 @@ object ServiceModel {
         }
     }
 }
+
+data class QuizDetailBean(
+    val description: String,
+    val optionList: List<Option>
+)
+
+data class Option(
+    val chooseRate: Double,
+    val description: String,
+    val optionId: Int
+)
 
 data class ErrorRankBean(
     val description: String,
