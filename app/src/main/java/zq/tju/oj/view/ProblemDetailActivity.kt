@@ -57,6 +57,7 @@ class ProblemDetailActivity : AppCompatActivity() {
 
                 layout_container.removeAllViews()
                 layout_container.verticalLayout {
+
                     gravity = Gravity.CENTER_HORIZONTAL
                     //addView(CardView(this@ProblemDetailActivity).apply {
                     textView {
@@ -90,12 +91,11 @@ class ProblemDetailActivity : AppCompatActivity() {
                     }
                     addView(ColumnChartView(this@ProblemDetailActivity).apply {
                         columnChartData = columnData
-                        layoutParams = LinearLayout.LayoutParams(-1, 350).apply {
+                        layoutParams = LinearLayout.LayoutParams(matchParent, 350).apply {
                             setMargins(0, 48, 0, 0)
                         }
-
                     })
-                }
+                }.layoutParams.width = matchParent
             }
         }
     }

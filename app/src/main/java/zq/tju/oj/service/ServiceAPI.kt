@@ -219,7 +219,7 @@ data class Option(
 
 data class ErrorRankBean(
     val description: String,
-    val errorRate: Double,
+    val accuracy: Double,
     val pid: Int,
     val totalCount: Int,
     val typeId: Int = 2

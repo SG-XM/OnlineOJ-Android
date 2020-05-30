@@ -56,14 +56,15 @@ object SaveTokenInterceptor : Interceptor {
 
 object TokenInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        return chain.proceed(chain.request().newBuilder().addHeader("Authorization",CommonPreferences.token).build())
+        return chain.proceed(chain.request().newBuilder().addHeader("Authorization", CommonPreferences.token).build())
     }
 
 }
 
 object ServiceFactory {
-//    private const val BASE_URL = "http://tsai73.natappfree.cc/"
-    private const val BASE_URL = "http://9zcvgg.natappfree.cc/"
+        private const val BASE_URL = "http://47.101.33.252/"
+//    private const val BASE_URL = "http://47.101.33.252/"
+    //    private const val BASE_URL = "http://9zcvgg.natappfree.cc/"
     private val loggingInterceptor = HttpLoggingInterceptor()
         .apply { level = HttpLoggingInterceptor.Level.BODY }
     private val client = OkHttpClient.Builder()
