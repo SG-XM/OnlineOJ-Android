@@ -41,8 +41,8 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         CommonContext.registerContext(this)
         if (CommonPreferences.token != "") {
-            CommonContext.application.startActivity<MainActivity>()
             finish()
+            CommonContext.application.startActivity<MainActivity>()
         }
         bt_login.setOnClickListener {
 
