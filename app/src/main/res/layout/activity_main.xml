@@ -90,7 +90,7 @@
                       app:layout_constraintTop_toTopOf="parent"
                       app:layout_constraintStart_toStartOf="parent"
                       android:textStyle="bold"
-                      android:text="Online Judge"
+                      android:text="Quiz Exercises"
                       android:textSize="30sp"/>
             <TextView
                     android:id="@+id/tv_title5"

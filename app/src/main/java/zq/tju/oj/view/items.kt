@@ -45,9 +45,10 @@ class QuizErrorItem(val bean: ErrorRankBean) : Item {
             item as QuizErrorItem
             holder.apply {
                 title.text = item.bean.description
-                rate.text = if (item.bean.totalCount == 0) " - " else "Accuracy ${(1.0 - item.bean.errorRate) * 100}%"
+                val tmp = item.bean.errorRate
+                rate.text = if (item.bean.totalCount == 0) " - " else "Accuracy ${(item.bean.errorRate) * 100}%"
                 rate.textColor =
-                    if (item.bean.totalCount > 0 && item.bean.errorRate < 0.5) view.resources.getColor(R.color.seagreen) else view.resources.getColor(
+                    if (item.bean.totalCount > 0 && item.bean.errorRate > 0.5) view.resources.getColor(R.color.seagreen) else view.resources.getColor(
                         R.color.design_default_color_error
                     )
                 cnt.text = "${item.bean.totalCount} submits"
