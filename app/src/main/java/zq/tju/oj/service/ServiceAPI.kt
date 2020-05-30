@@ -92,6 +92,7 @@ object ServiceModel {
             val data = ServiceAPI.ojRank().await()
             if (data.status == 10004) {
                 toast("信息过期，请重新登录")
+                CommonPreferences.token=""
                 ac.startActivity<LoginActivity>()
                 ac.finish()
                 return@launch
@@ -163,9 +164,17 @@ object ServiceModel {
         }
     }
 
-    fun quizRank() {
+    fun quizRank(ac:Activity) {
         GlobalScope.launch(Dispatchers.Main + coroutineHandler) {
-            ServiceAPI.quizRank().await().dealOrNull {
+            val data = ServiceAPI.quizRank().await()
+            if (data.status == 10004) {
+                toast("信息过期，请重新登录")
+                CommonPreferences.token=""
+                ac.startActivity<LoginActivity>()
+                ac.finish()
+                return@launch
+            }
+            data.dealOrNull {
                 quizRankLiveData.value = it
             }
         }

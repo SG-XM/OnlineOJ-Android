@@ -1,5 +1,6 @@
 package zq.tju.oj
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.twt.zq.commons.extentions.bindNonNull
@@ -8,6 +9,7 @@ import lecho.lib.hellocharts.model.*
 import lecho.lib.hellocharts.util.ChartUtils
 import org.jetbrains.anko.collections.forEachWithIndex
 import org.jetbrains.anko.startActivity
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import zq.tju.oj.service.ServiceModel
 import zq.tju.oj.view.OjDetailActivity
 import zq.tju.oj.view.QuizDetailActivity
@@ -60,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 
         ServiceModel.apply {
             ojRank(this@MainActivity)
-            quizRank()
+            quizRank(this@MainActivity)
             ojRankLiveData.bindNonNull(this@MainActivity) {
                 tv_title3.text = "Rank: #${it.rank}/${it.totalUser}"
                 initOj(
@@ -78,12 +80,9 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-//        initOj(listOf(20f, 35f, 35f))
-//        val list = mutableListOf<Float>()
-//        val rand = Random(System.currentTimeMillis())
-//        for (i in 0..4) {
-//            list.add(rand.nextInt(10, 50).toFloat())
-//        }
 
+    }
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 }
