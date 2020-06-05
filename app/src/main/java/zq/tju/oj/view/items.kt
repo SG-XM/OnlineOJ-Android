@@ -3,6 +3,7 @@ package zq.tju.oj.view
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.twt.zq.commons.common.CommonContext
 import com.twt.zq.commons.extentions.Item
@@ -24,6 +25,7 @@ import org.jetbrains.anko.textColor
 import zq.tju.oj.R
 import zq.tju.oj.service.ErrorRankBean
 import zq.tju.oj.service.OJProcessBean
+import java.text.DecimalFormat
 
 class QuizErrorItem(val bean: ErrorRankBean) : Item {
     override fun areItemsTheSame(newItem: Item): Boolean {
@@ -45,7 +47,8 @@ class QuizErrorItem(val bean: ErrorRankBean) : Item {
             item as QuizErrorItem
             holder.apply {
                 title.text = item.bean.description
-                rate.text = if (item.bean.totalCount == 0) " - " else "Accuracy ${(item.bean.accuracy) * 100}%"
+                rate.text =
+                    if (item.bean.totalCount == 0) " - " else "Accuracy ${DecimalFormat("#0.00").format((item.bean.accuracy) * 100)}%"
                 rate.textColor =
                     if (item.bean.totalCount > 0 && item.bean.accuracy > 0.5) view.resources.getColor(R.color.seagreen) else view.resources.getColor(
                         R.color.design_default_color_error
@@ -71,6 +74,7 @@ class QuizErrorItem(val bean: ErrorRankBean) : Item {
 
     override val controller = Companion
 }
+
 class QuizHeaderItem(val nums: List<Float>) : Item {
     companion object : ItemController {
         override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
@@ -103,6 +107,7 @@ class QuizHeaderItem(val nums: List<Float>) : Item {
 
     override val controller = Companion
 }
+
 class OJHeaderItem(val list: List<Float>) : Item {
     companion object : ItemController {
         override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
@@ -165,6 +170,9 @@ class OJRecordItem(val bean: OJProcessBean) : Item {
                 pass.text = if (item.bean.pass) "Accepted" else "Failed"
                 pass.backgroundDrawable =
                     pass.context.resources.getDrawable(if (item.bean.pass) R.drawable.textview_circle_ac else R.drawable.textview_circle_fa)
+                view.setOnClickListener {
+                    view.context.startActivity<SubmissionDetail>()
+                }
             }
         }
     }

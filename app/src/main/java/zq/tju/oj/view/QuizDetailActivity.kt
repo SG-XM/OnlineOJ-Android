@@ -39,6 +39,7 @@ class QuizDetailActivity : AppCompatActivity() {
                 page = 1
                 hasMore.value = true
                 ServiceModel.isQuizErrorLoading.value = true
+                ServiceModel.quizRank(this@QuizDetailActivity)
                 ServiceModel.quizError()
             }
 

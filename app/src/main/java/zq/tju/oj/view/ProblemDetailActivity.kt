@@ -44,7 +44,7 @@ class ProblemDetailActivity : AppCompatActivity() {
                         Column(
                             listOf(
                                 SubcolumnValue(
-                                    (it.chooseRate).toFloat(),
+                                    (it.chooseCount).toFloat(),
                                     ChartUtils.pickColor()
                                 )
                             )

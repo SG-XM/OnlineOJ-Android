@@ -54,6 +54,9 @@ interface ServiceAPI {
     @GET("/api/back/quiz/rank/error/{pid}")
     fun quizDetail(@Path("pid") pid: String): Deferred<CommonBody<QuizDetailBean>>
 
+    @GET("/api/back/oj/progress/{rid}")
+    fun submissionDetail(@Path("rid") pid: String): Deferred<CommonBody<SubmissionBean>>
+
 
     companion object : ServiceAPI by ServiceFactory()
 }
@@ -63,6 +66,7 @@ object ServiceModel {
     val ojProcessLiveData = MutableLiveData<MutableList<Item>>()
     val quizErrorLiveData = MutableLiveData<MutableList<Item>>()
     val ojRankLiveData = MutableLiveData<OjRankData>()
+    val submissionDetail = MutableLiveData<SubmissionBean>()
     //    var token: String = "1ccc45bc-5404-4a70-9e6d-7dea10b9938b"
     val rooms = MutableLiveData<MutableList<RoomBean>>()
     val quizDetailLiveData = MutableLiveData<QuizDetailBean>()
@@ -87,12 +91,20 @@ object ServiceModel {
         }
     }
 
+    fun submissionDetail(rid: String) {
+        GlobalScope.launch(Dispatchers.Main + coroutineHandler) {
+            ServiceAPI.submissionDetail(rid).await().dealOrNull {
+                submissionDetail.value = it
+            }
+        }
+    }
+
     fun ojRank(ac: Activity) {
         GlobalScope.launch(Dispatchers.Main + coroutineHandler) {
             val data = ServiceAPI.ojRank().await()
             if (data.status == 10004) {
                 toast("信息过期，请重新登录")
-                CommonPreferences.token=""
+                CommonPreferences.token = ""
                 ac.startActivity<LoginActivity>()
                 ac.finish()
                 return@launch
@@ -164,12 +176,12 @@ object ServiceModel {
         }
     }
 
-    fun quizRank(ac:Activity) {
+    fun quizRank(ac: Activity) {
         GlobalScope.launch(Dispatchers.Main + coroutineHandler) {
             val data = ServiceAPI.quizRank().await()
             if (data.status == 10004) {
                 toast("信息过期，请重新登录")
-                CommonPreferences.token=""
+                CommonPreferences.token = ""
                 ac.startActivity<LoginActivity>()
                 ac.finish()
                 return@launch
@@ -206,6 +218,23 @@ object ServiceModel {
     }
 }
 
+data class SubmissionBean(
+    val info: String,
+    val myRankPercent: Double,
+    val myTime: Double,
+    val pass: Boolean,
+    val passTestExampleCount: Int,
+    val submitDate: String,
+    val timeRankList: List<TimeRank>,
+    val title: String,
+    val totalTestExampleCount: Int
+)
+
+data class TimeRank(
+    val key: Double,
+    val value: Double
+)
+
 data class QuizDetailBean(
     val description: String,
     val optionList: List<Option>
@@ -214,7 +243,8 @@ data class QuizDetailBean(
 data class Option(
     val chooseRate: Double,
     val description: String,
-    val optionId: Int
+    val optionId: Int,
+    val chooseCount: Int
 )
 
 data class ErrorRankBean(
