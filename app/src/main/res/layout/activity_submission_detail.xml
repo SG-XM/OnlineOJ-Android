@@ -5,18 +5,23 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="24dp"
+
         tools:context=".view.SubmissionDetail">
+
     <androidx.cardview.widget.CardView
             android:elevation="4dp"
-            app:cardBackgroundColor="@color/darkGrey"
-            app:cardCornerRadius="6dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="8dp"
             app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/card_title"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="24dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
+                android:background="@null"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginHorizontal="10dp"
@@ -109,53 +114,49 @@
     </androidx.cardview.widget.CardView>
     <androidx.cardview.widget.CardView
             android:elevation="4dp"
-            android:visibility="gone"
-            app:cardBackgroundColor="@color/darkGrey"
-            app:cardCornerRadius="6dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="8dp"
             app:layout_constraintTop_toBottomOf="@id/card_title"
             android:id="@+id/card_chart"
             android:layout_width="match_parent"
             android:layout_marginTop="16dp"
-            android:layout_height="wrap_content">
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="24dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="0dp">
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_marginTop="8dp"
+                android:background="@null"
                 android:layout_marginBottom="8dp"
                 android:layout_marginHorizontal="10dp"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
+            <lecho.lib.hellocharts.view.ColumnChartView
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:id="@+id/ccv_pre_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:padding="8dp"
+                    android:paddingTop="12dp"
+                    app:layout_constraintBottom_toTopOf="@id/pccv_pre_main"
+            />
 
+
+            <lecho.lib.hellocharts.view.PreviewColumnChartView
+                    app:layout_constraintTop_toBottomOf="@id/ccv_pre_main"
+                    android:id="@+id/pccv_pre_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:padding="6dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:transitionName="pre_column"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
-    <ScrollView
-            app:layout_constraintTop_toBottomOf="@id/card_title"
-            android:id="@+id/scroller"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            <com.eudycontreras.calendarheatmaplibrary.framework.CalHeatMapView
-                    android:layout_width="wrap_content"
-                    android:layout_height="250dp"
-                    android:id="@+id/heatmap_cal"
 
-            />
-        </HorizontalScrollView>
 
-    </ScrollView>
-    <!--<com.eudycontreras.calendarheatmaplibrary.framework.BubbleLayoutContainer-->
-            <!--android:id="@+id/cellInfoViewOverlay"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
-
-        <!--<include-->
-                <!--android:id="@+id/cellInfoBox"-->
-                <!--layout="@layout/cell_info"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginStart="30dp"-->
-                <!--android:layout_marginTop="30dp" />-->
-    <!--</com.eudycontreras.calendarheatmaplibrary.framework.BubbleLayoutContainer>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

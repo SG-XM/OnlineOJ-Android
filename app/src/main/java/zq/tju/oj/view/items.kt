@@ -171,7 +171,7 @@ class OJRecordItem(val bean: OJProcessBean) : Item {
                 pass.backgroundDrawable =
                     pass.context.resources.getDrawable(if (item.bean.pass) R.drawable.textview_circle_ac else R.drawable.textview_circle_fa)
                 view.setOnClickListener {
-                    view.context.startActivity<SubmissionDetail>()
+                    view.context.startActivity<SubmissionDetail>("rid" to item.bean.id.toString())
                 }
             }
         }
