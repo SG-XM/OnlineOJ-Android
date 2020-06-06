@@ -222,7 +222,7 @@ data class SubmissionBean(
     val info: String,
     val myRankPercent: Double,
     val myTime: Double,
-    val pass: Boolean,
+    var pass: Boolean,
     val passTestExampleCount: Int,
     val submitDate: String,
     val timeRankList: List<TimeRank>,

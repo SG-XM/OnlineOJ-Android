@@ -10,4 +10,6 @@
     <color name="colorOP">#3ACBEB</color>
     <color name="colorAC">#5CB85C</color>
     <color name="colorFA">#D9534F</color>
+    <color name="colorAC2">#449D44</color>
+    <color name="colorFA2">#D05451</color>
 </resources>

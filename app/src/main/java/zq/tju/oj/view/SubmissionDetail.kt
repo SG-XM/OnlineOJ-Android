@@ -2,6 +2,7 @@ package zq.tju.oj.view
 
 import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.eudycontreras.calendarheatmaplibrary.framework.data.Date
 import com.eudycontreras.calendarheatmaplibrary.framework.data.HeatMapData
@@ -15,6 +16,7 @@ import lecho.lib.hellocharts.util.ChartUtils
 import lecho.lib.hellocharts.view.ColumnChartView
 import lecho.lib.hellocharts.view.PreviewColumnChartView
 import org.jetbrains.anko.collections.forEachWithIndex
+import org.jetbrains.anko.textColor
 import zq.tju.oj.R
 import zq.tju.oj.model.SomeViewModel
 import zq.tju.oj.service.ServiceModel
@@ -34,6 +36,7 @@ class SubmissionDetail : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_submission_detail)
         rid = intent.getStringExtra("rid") ?: ""
+        ServiceModel.submissionDetail.value?.pass = false
         initView()
         initListener()
         initData()
@@ -49,20 +52,36 @@ class SubmissionDetail : AppCompatActivity() {
         ServiceModel.apply {
             submissionDetail(rid)
             submissionDetail.bindNonNull(this@SubmissionDetail) {
+                card_err.visibility = View.GONE
+                tv_testtime_val.visibility = View.VISIBLE
+                tv_testtime.visibility = View.VISIBLE
+                tv_testmem_val.visibility = View.VISIBLE
+                tv_testmem.visibility = View.VISIBLE
                 tv_title.text = "${it.title}\n提交记录"
                 tv_testcnt.text = "${it.passTestExampleCount}/${it.totalTestExampleCount} 个通过测试用例"
                 tv_testtime_val.text = "${it.myTime} ms"
                 tv_teststat_val.text = if (it.pass) "通过" else "失败"
+                tv_teststat_val.textColor = if (it.pass) getColor(R.color.colorAC2) else getColor(R.color.colorFA2)
                 tv_testdate_val.text = it.submitDate
-                setAllDatas(
-                    it.timeRankList.map { it.value.toFloat() },
-                    it.myRankPercent.toFloat(),
-                    it.timeRankList.map { it.key.toFloat() })
-                mColumnChartView!!.columnChartData = mChartData //设置选中区内容
-                mPreColumnChartView!!.columnChartData = mPreChartData //设置预览区内容
-                mColumnChartView!!.isZoomEnabled = false //禁用缩放
-                mColumnChartView!!.isScrollEnabled = false //禁用滚动
-                previewX() //初识只能X方向滑动
+                if (it.pass) {
+                    setAllDatas(
+                        it.timeRankList.map { it.value.toFloat() },
+                        it.myRankPercent.toFloat(),
+                        it.timeRankList.map { it.key.toFloat() })
+                    mColumnChartView!!.columnChartData = mChartData //设置选中区内容
+                    mPreColumnChartView!!.columnChartData = mPreChartData //设置预览区内容
+                    mColumnChartView!!.isZoomEnabled = false //禁用缩放
+                    mColumnChartView!!.isScrollEnabled = false //禁用滚动
+                    previewX() //初识只能X方向滑动
+                } else {
+                    card_err.visibility = View.VISIBLE
+                    tv_testtime.visibility = View.GONE
+                    tv_testtime_val.visibility = View.GONE
+                    tv_testmem.visibility = View.GONE
+                    tv_testmem_val.visibility = View.GONE
+                    tv_testres.text = it.info
+                    tv_testres.textColor = getColor(R.color.colorFA2)
+                }
             }
         }
 
