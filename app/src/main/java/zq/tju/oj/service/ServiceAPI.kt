@@ -3,6 +3,9 @@ package zq.tju.oj.service
 import android.app.Activity
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.eudycontreras.calendarheatmaplibrary.framework.data.Date
+import com.eudycontreras.calendarheatmaplibrary.framework.data.TimeSpan
+import com.eudycontreras.calendarheatmaplibrary.framework.data.Week
 import com.twt.zq.commons.common.*
 import com.twt.zq.commons.extentions.Item
 import com.twt.zq.commons.extentions.MyToast.toast
@@ -57,6 +60,9 @@ interface ServiceAPI {
     @GET("/api/back/oj/progress/{rid}")
     fun submissionDetail(@Path("rid") pid: String): Deferred<CommonBody<SubmissionBean>>
 
+    @GET("/api/back/oj/progress/submit")
+    fun submitCal(@Query("year") year: Int): Deferred<CommonBody<TimeSpan>>
+
 
     companion object : ServiceAPI by ServiceFactory()
 }
@@ -67,6 +73,7 @@ object ServiceModel {
     val quizErrorLiveData = MutableLiveData<MutableList<Item>>()
     val ojRankLiveData = MutableLiveData<OjRankData>()
     val submissionDetail = MutableLiveData<SubmissionBean>()
+    val submitCalLiveData = MutableLiveData<TimeSpan>()
     //    var token: String = "1ccc45bc-5404-4a70-9e6d-7dea10b9938b"
     val rooms = MutableLiveData<MutableList<RoomBean>>()
     val quizDetailLiveData = MutableLiveData<QuizDetailBean>()
@@ -87,6 +94,14 @@ object ServiceModel {
 
             ServiceAPI.quizDetail(pid).await().dealOrNull {
                 quizDetailLiveData.value = it
+            }
+        }
+    }
+
+    fun submitCal(year: Int=2020) {
+        GlobalScope.launch(Dispatchers.Main + coroutineHandler) {
+            ServiceAPI.submitCal(year).await().dealOrNull {
+                submitCalLiveData.value = it
             }
         }
     }
@@ -217,6 +232,16 @@ object ServiceModel {
         }
     }
 }
+
+
+//data class SubmitCalBean(
+//    val dateMax: Date,
+//    val dateMin: Date,
+//    val weeks: List<Week>
+//)
+
+
+
 
 data class SubmissionBean(
     val info: String,
