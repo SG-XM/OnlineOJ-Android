@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
                     )
                     setCellColorEmpty(Color.WHITE)
                     setCellElevation(4f)
-                    val i = Random(System.currentTimeMillis()).nextInt()
+                    val i = Random(System.currentTimeMillis()).nextInt(0,colors.size)
                     setCellColorMax(colors[i % colors.size].second)
                     setCellColorMin(colors[i % colors.size].first)
 //                  setCellInfoView(binding)

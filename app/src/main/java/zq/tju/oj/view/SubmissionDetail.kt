@@ -121,10 +121,24 @@ class SubmissionDetail : AppCompatActivity() {
         //预览区数据相同
         mPreChartData = ColumnChartData(mChartData)
         //所有的预览区列都变成灰色 好看一点
-        mPreChartData!!.axisXBottom = null
+        mPreChartData!!.axisXBottom = Axis().apply {
+            val list = mutableListOf<AxisValue>()
+            xs.forEachWithIndex { i, fl ->
+                if (i == mIndex) {
+                    list.add(AxisValue(i.toFloat()).setLabel("Here are you"))
+                } else
+                    list.add(AxisValue(i.toFloat()).setLabel(""))
+            }
+            setValues(list)
+            setTextColor(Color.BLACK)
+        }
         mPreChartData!!.axisYLeft = Axis()
+        mPreChartData!!.apply {
+            isValueLabelBackgroundEnabled = false
+        }
         mPreChartData!!.columns.forEachIndexed { index, column ->
             for (value in column.values) {
+
                 if (index == mIndex) {
                     value.color = Color.BLACK
                 } else
