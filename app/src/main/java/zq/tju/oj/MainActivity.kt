@@ -96,15 +96,16 @@ class MainActivity : AppCompatActivity() {
                     )
                     setCellColorEmpty(Color.WHITE)
                     setCellElevation(4f)
-                    val i = Random(System.currentTimeMillis()).nextInt(0,colors.size)
+                    val i = Random(System.currentTimeMillis()).nextInt(0, colors.size)
                     setCellColorMax(colors[i % colors.size].second)
                     setCellColorMin(colors[i % colors.size].first)
-//                  setCellInfoView(binding)
+//                     setCellInfoView(binding)
                     isHapticFeedbackEnabled = false
                     setShowCellDayText(true)
                     setShowLegend(true)
                 }
-                scroll_h.addView(stub, 200, 600)
+                if (scroll_h.childCount == 0)
+                    scroll_h.addView(stub, 200, 600)
                 scroll_h.post {
                     scroll_h.smoothScrollTo(stub.measuredWidth / 12 * Calendar.getInstance()[Calendar.MONTH], 0)
                 }
