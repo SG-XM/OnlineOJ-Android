@@ -19,7 +19,7 @@ class MyApplication : Application() {
         super.onCreate()
         CalligraphyConfig.initDefault(
             CalligraphyConfig.Builder()
-                .setDefaultFontPath("font/din.otf")
+                .setDefaultFontPath("")
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         )

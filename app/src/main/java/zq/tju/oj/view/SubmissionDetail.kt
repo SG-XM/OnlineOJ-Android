@@ -66,7 +66,7 @@ class SubmissionDetail : AppCompatActivity() {
                 if (it.pass) {
                     setAllDatas(
                         it.timeRankList.map { it.value.toFloat() },
-                        it.myRankPercent.toFloat(),
+                        it.myRankIndex,
                         it.timeRankList.map { it.key.toFloat() })
                     mColumnChartView!!.columnChartData = mChartData //设置选中区内容
                     mPreColumnChartView!!.columnChartData = mPreChartData //设置预览区内容
@@ -95,7 +95,7 @@ class SubmissionDetail : AppCompatActivity() {
     /**
      * 设置选区和预览区的所有数据
      */
-    private fun setAllDatas(value: List<Float>, mIndex: Float, xs: List<Float>) {
+    private fun setAllDatas(value: List<Float>, mIndex: Int, xs: List<Float>) {
         val columns: MutableList<Column> = ArrayList()
         var values: MutableList<SubcolumnValue?>
         //循环给每个列设置不同的随机值
@@ -125,7 +125,7 @@ class SubmissionDetail : AppCompatActivity() {
         mPreChartData!!.axisYLeft = Axis()
         mPreChartData!!.columns.forEachIndexed { index, column ->
             for (value in column.values) {
-                if (value.value == mIndex) {
+                if (index == mIndex) {
                     value.color = Color.BLACK
                 } else
                     value.color = ChartUtils.DEFAULT_DARKEN_COLOR

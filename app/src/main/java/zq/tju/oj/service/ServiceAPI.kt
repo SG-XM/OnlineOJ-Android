@@ -252,6 +252,7 @@ data class SubmissionBean(
     val submitDate: String,
     val timeRankList: List<TimeRank>,
     val title: String,
+    val myRankIndex:Int,
     val totalTestExampleCount: Int
 )
 

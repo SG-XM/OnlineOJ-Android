@@ -3,14 +3,10 @@ package zq.tju.oj
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.updateLayoutParams
 import com.eudycontreras.calendarheatmaplibrary.framework.CalHeatMapView
 import com.eudycontreras.calendarheatmaplibrary.framework.data.HeatMapData
 import com.eudycontreras.calendarheatmaplibrary.framework.data.HeatMapOptions
-import com.eudycontreras.calendarheatmaplibrary.framework.data.TimeSpan
 import com.twt.zq.commons.extentions.bindNonNull
 import kotlinx.android.synthetic.main.activity_main.*
 import lecho.lib.hellocharts.model.*
@@ -19,10 +15,11 @@ import org.jetbrains.anko.collections.forEachWithIndex
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
-import zq.tju.oj.model.SomeViewModel
 import zq.tju.oj.service.ServiceModel
 import zq.tju.oj.view.OjDetailActivity
 import zq.tju.oj.view.QuizDetailActivity
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.random.Random
 
 
@@ -89,7 +86,6 @@ class MainActivity : AppCompatActivity() {
                 initQuiz(it.scoreList.map { it.toFloat() })
             }
             submitCalLiveData.bindNonNull(this@MainActivity) {
-                toast("ex")
                 val stub = CalHeatMapView(this@MainActivity)
 
                 stub.apply {
@@ -97,21 +93,20 @@ class MainActivity : AppCompatActivity() {
                         HeatMapData(
                             it, HeatMapOptions()
                         )
-//                        SomeViewModel().demoData1
                     )
                     setCellColorEmpty(Color.WHITE)
                     setCellElevation(4f)
                     val i = Random(System.currentTimeMillis()).nextInt()
                     setCellColorMax(colors[i % colors.size].second)
                     setCellColorMin(colors[i % colors.size].first)
-//            setCellInfoView(CellInfo)
+//                  setCellInfoView(binding)
                     isHapticFeedbackEnabled = false
                     setShowCellDayText(true)
                     setShowLegend(true)
                 }
                 scroll_h.addView(stub, 200, 600)
                 scroll_h.post {
-                    scroll_h.smoothScrollTo(stub.measuredWidth / 2, 0)
+                    scroll_h.smoothScrollTo(stub.measuredWidth / 12 * Calendar.getInstance()[Calendar.MONTH], 0)
                 }
             }
         }
