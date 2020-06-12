@@ -28,7 +28,7 @@
             android:layout_marginRight="15dp"
             android:background="@drawable/rounded_edittext"
             android:gravity="center"
-            android:hint="请输入您的手机号"
+            android:hint="请输入您的邮箱"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/account_input"/>
@@ -44,7 +44,7 @@
             android:inputType="textPassword"
             android:background="@drawable/rounded_edittext"
             android:gravity="center"
-            android:hint="请输入验证码"
+            android:hint="请输入密码"
             android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@id/btn_send"
             app:layout_constraintStart_toStartOf="parent"
