@@ -6,6 +6,7 @@ OnlineOJ Android 端项目源码
 $ gradlew clean
 $ gradlew compileReleaseSources
 ```
+[backend repository](https://github.com/CMW845751770/quiz)
 
 ## Try it🚀
 [you can get demo here](https://www.sgxm.tech/wp-content/uploads/ojonline.apk)
