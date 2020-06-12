@@ -7,13 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.eudycontreras.calendarheatmaplibrary.framework.CalHeatMapView
 import com.eudycontreras.calendarheatmaplibrary.framework.data.HeatMapData
 import com.eudycontreras.calendarheatmaplibrary.framework.data.HeatMapOptions
+import com.twt.zq.commons.common.CommonPreferences
 import com.twt.zq.commons.extentions.bindNonNull
 import kotlinx.android.synthetic.main.activity_main.*
 import lecho.lib.hellocharts.model.*
 import lecho.lib.hellocharts.util.ChartUtils
 import org.jetbrains.anko.collections.forEachWithIndex
 import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.toast
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import zq.tju.oj.service.ServiceModel
 import zq.tju.oj.view.OjDetailActivity
@@ -33,6 +33,11 @@ class MainActivity : AppCompatActivity() {
         }
         card_option.setOnClickListener {
             startActivity<QuizDetailActivity>()
+        }
+        img_exit.setOnClickListener {
+            CommonPreferences.token = ""
+            startActivity<LoginActivity>()
+            finish()
         }
         initData()
     }

@@ -28,7 +28,6 @@
             android:layout_marginRight="15dp"
             android:background="@drawable/rounded_edittext"
             android:gravity="center"
-            android:text="845751770@qq.com"
             android:hint="请输入您的手机号"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -37,7 +36,6 @@
     <EditText
             android:id="@+id/code_input"
             android:layout_width="0dp"
-            android:text="12345678"
             android:layout_height="wrap_content"
             android:layout_below="@id/account_input"
             android:layout_marginStart="15dp"

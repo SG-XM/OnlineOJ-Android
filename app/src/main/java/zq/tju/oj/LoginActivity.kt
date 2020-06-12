@@ -22,8 +22,6 @@ class LoginActivity : AppCompatActivity() {
     companion object {
         val vercodeLiveData = MutableLiveData<Boolean>().apply { value = true }
         val vercodetimeLiveData = MutableLiveData<Int>()
-
-
     }
 
     val forCounter = object : CountDownTimer(60 * 1000, 1000) {
